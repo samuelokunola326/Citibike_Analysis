@@ -1,0 +1,37 @@
+
+
+Sub CombineCsvs()
+
+
+Dim FolderPath As String
+Dim FileName As String
+Dim wbResult As Workbook
+Dim WB As Workbook
+
+
+  FolderPath = "C:\Users\samue\Citibike_Analysis\Citi_Bike_Files"
+  If FolderPath Like "*[!\/]" Then
+    FolderPath = FolderPath & "/"
+  End If
+  
+  FileName = Dir(FolderPath & "*.csv")
+  
+  Set wbResult = Workbooks.Add
+  
+  Application.DisplayAlerts = False
+  Application.ScreenUpdating = False
+  
+  Do While FileName <> vbNullString
+    Set WB = Workbooks.Open(FolderPath & FileName)
+    WB.ActiveSheet.UsedRange.Copy wbResult.ActiveSheet.UsedRange.Rows(wbResult.ActiveSheet.UsedRange.Rows.Count).Offset(1).Resize(1)
+    WB.Close False
+    FileName = Dir()
+  Loop
+  
+  wbResult.ActiveSheet.Rows(1).EntireRow.Delete
+  
+  Application.ScreenUpdating = True
+  Application.DisplayAlerts = True
+  
+  
+End Sub
